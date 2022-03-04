@@ -1,23 +1,62 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Header from './layouts/Header';
+import Body from './layouts/Body';
+import Footer from './layouts/Footer';
+import { STATUS_CONTENT } from './config/constants.js';
 
+const todoArray = [
+  {
+    content: 'Dùng create-react-app tạo app',
+    status: STATUS_CONTENT.NEW,
+  },
+  {
+    content: 'Tạo Home Page, import vào App.js',
+    status: STATUS_CONTENT.DOING,
+  },
+  {
+    content: 'Tạo UI như design trong cái link figma',
+    status: STATUS_CONTENT.DONE,
+  },
+];
 function App() {
+  const [listTodo, setListTodo] = useState(todoArray);
+
+  const addNewTodo = (valueItem) => {
+    setListTodo([
+      ...listTodo,
+      {
+        content: valueItem.content,
+        status: valueItem.status,
+      },
+    ]);
+  };
+
+  const changeStatus = (indexItem) => {
+    const arrTodo = listTodo;
+
+    arrTodo.splice(indexItem, 1, {
+      content: listTodo[indexItem].content,
+      status:
+        listTodo[indexItem].status === STATUS_CONTENT.NEW
+          ? STATUS_CONTENT.DOING
+          : STATUS_CONTENT.DONE,
+    });
+
+    setListTodo([...arrTodo]);
+  };
+
+  const deleteItem = (indexItem) => {
+    const arrTodo = listTodo;
+    arrTodo.splice(indexItem, 1);
+    setListTodo([...arrTodo]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="todo-app">
+      <Header addNewTodo={addNewTodo} />
+      <Body todoArray={listTodo} changeStatus={changeStatus} deleteItem={deleteItem} />
+      <Footer />
     </div>
   );
 }
