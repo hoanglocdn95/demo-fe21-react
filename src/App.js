@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Header from './layouts/Header';
 import Body from './layouts/Body';
 import Footer from './layouts/Footer';
 import { STATUS_CONTENT } from './config/constants.js';
+import useCount from './hook/useCount.js';
 
 const todoArray = [
   {
@@ -20,7 +21,13 @@ const todoArray = [
   },
 ];
 function App() {
-  const [listTodo, setListTodo] = useState(todoArray);
+  const [listTodo, setListTodo] = useState([]);
+
+  const { handleDoubleCount, handleIncreaseCount, count } = useCount(5);
+
+  useEffect(() => {
+    setListTodo(todoArray);
+  }, []);
 
   const addNewTodo = (valueItem) => {
     setListTodo([
@@ -54,6 +61,9 @@ function App() {
 
   return (
     <div className="todo-app">
+      <h1>{count}</h1>
+      <button onClick={handleIncreaseCount}>+1</button>
+      <button onClick={handleDoubleCount}>*2</button>
       <Header addNewTodo={addNewTodo} />
       <Body todoArray={listTodo} changeStatus={changeStatus} deleteItem={deleteItem} />
       <Footer />
