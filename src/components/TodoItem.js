@@ -2,14 +2,6 @@ import React, { useEffect } from 'react';
 import * as statusContent from '../config/constants.js';
 
 function TodoItem({ content, status, changeStatus, deleteItem }) {
-  useEffect(() => {
-    console.log('render lần 1');
-
-    return () => {
-      console.log('render lần cuối');
-    };
-  }, []);
-
   const chooseStyleStatus = () => {
     switch (status) {
       case statusContent.STATUS_CONTENT.NEW:
