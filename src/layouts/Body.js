@@ -10,23 +10,22 @@ import DoingScreen from '../screens/DoingScreen';
 import * as statusContent from '../config/constants.js';
 import todoStore from '../store/todoStore.js';
 
-function Body({ todoArray, deleteItem }) {
+function Body() {
   const renderItem = (status = null) => {
-    return todoArray
-      .filter((item) => {
-        if (status) return item.status === status;
-        return true;
-      })
-      .map((item, index) => {
-        return (
-          <TodoItem
-            key={index}
-            {...item}
-            changeStatus={() => todoStore.changeStatus(index)}
-            deleteItem={() => deleteItem(index)}
-          />
-        );
-      });
+    return todoStore.TodoArray.filter((item) => {
+      if (status) return item.status === status;
+      return true;
+    }).map((item, index) => {
+      return (
+        <TodoItem
+          key={index}
+          {...item}
+          changeStatus={() => todoStore.changeStatus(index)}
+          deleteItem={() => todoStore.deleteItem(index)}
+          saveContent={(content) => todoStore.saveContent(index, content)}
+        />
+      );
+    });
   };
 
   return (

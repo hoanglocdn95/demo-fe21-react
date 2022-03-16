@@ -20,6 +20,11 @@ class Todo {
       status: STATUS_CONTENT.DONE,
     },
   ];
+
+  get TodoArray() {
+    return this.todoArray;
+  }
+
   addNewTodo = ({ content, status }) => {
     this.todoArray.push({ content, status });
   };
@@ -31,6 +36,18 @@ class Todo {
         this.todoArray[indexItem].status === STATUS_CONTENT.NEW
           ? STATUS_CONTENT.DOING
           : STATUS_CONTENT.DONE,
+    });
+  };
+
+  deleteItem = (indexItem) => {
+    this.todoArray.splice(indexItem, 1);
+  };
+
+  saveContent = (indexItem, content) => {
+    console.log('content', content);
+    this.todoArray.splice(indexItem, 1, {
+      content: content,
+      status: this.todoArray[indexItem].status,
     });
   };
 }
