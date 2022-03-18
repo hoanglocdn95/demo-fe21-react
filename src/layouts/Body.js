@@ -8,24 +8,33 @@ import AllScreen from '../screens/AllScreen';
 import NewScreen from '../screens/NewScreen';
 import DoingScreen from '../screens/DoingScreen';
 import * as statusContent from '../config/constants.js';
-import todoStore from '../store/todoStore.js';
+// import todoStore from '../store/todoStore.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteItem } from '../slice/todoSlice';
 
 function Body() {
+  const todo = useSelector((state) => state.todo);
+  const dispatch = useDispatch();
+  console.log('Body ~ todo', todo);
+
   const renderItem = (status = null) => {
-    return todoStore.TodoArray.filter((item) => {
-      if (status) return item.status === status;
-      return true;
-    }).map((item, index) => {
-      return (
-        <TodoItem
-          key={index}
-          {...item}
-          changeStatus={() => todoStore.changeStatus(index)}
-          deleteItem={() => todoStore.deleteItem(index)}
-          saveContent={(content) => todoStore.saveContent(index, content)}
-        />
-      );
-    });
+    // return todoStore.TodoArray.filter((item) => {
+    return todo.listTodo
+      .filter((item) => {
+        if (status) return item.status === status;
+        return true;
+      })
+      .map((item, index) => {
+        return (
+          <TodoItem
+            key={index}
+            {...item}
+            // changeStatus={() => todoStore.changeStatus(index)}
+            deleteItem={() => dispatch(deleteItem({ indexItem: index }))}
+            // saveContent={(content) => todoStore.saveContent(index, content)}
+          />
+        );
+      });
   };
 
   return (

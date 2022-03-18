@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import { STATUS_CONTENT } from '../config/constants.js';
 import { useNavigate } from 'react-router-dom';
-import todoStore from '../store/todoStore.js';
+// import todoStore from '../store/todoStore.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewTodo } from '../slice/todoSlice';
 
 function Header() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [valueInput, setValueInput] = useState('');
   const [valueSelect, setValueSelect] = useState(STATUS_CONTENT.NEW);
 
   const handleAddNewTodo = (e) => {
-    todoStore.addNewTodo({ content: valueInput, status: valueSelect });
+    // todoStore.addNewTodo({ content: valueInput, status: valueSelect });
+    console.log('handleAddNewTodo');
+    dispatch(addNewTodo({ content: valueInput, status: valueSelect }));
     e.preventDefault();
   };
 
