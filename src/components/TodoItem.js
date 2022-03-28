@@ -1,6 +1,10 @@
+import React, { useState } from 'react';
 import * as statusContent from '../config/constants.js';
 
-function TodoItem({ content, status, changeStatus, deleteItem }) {
+function TodoItem({ content, status, changeStatus, deleteItem, saveContent }) {
+  const [isShowInput, setIsShowInput] = useState(false);
+  const [valueInput, setValueInput] = useState('');
+
   const chooseStyleStatus = () => {
     switch (status) {
       case statusContent.STATUS_CONTENT.NEW:
@@ -25,22 +29,47 @@ function TodoItem({ content, status, changeStatus, deleteItem }) {
     }
   };
 
+  const handleSaveItem = () => {
+    setIsShowInput(false);
+    setValueInput('');
+    saveContent(valueInput);
+  };
+
   return (
     <div className="todoItem">
       <div className="todoItem__content">
-        <p style={chooseStyleStatus()}>{content}</p>
+        {isShowInput ? (
+          <input
+            placeholder={content}
+            value={valueInput}
+            onChange={(e) => setValueInput(e.target.value)}
+          />
+        ) : (
+          <p style={chooseStyleStatus()}>{content}</p>
+        )}
       </div>
       <div className="todoItem__button">
-        <button
-          className="todoItem__button--green"
-          style={chooseStyleStatus()}
-          onClick={changeStatus}
-        >
-          {status}
-        </button>
-        <button className="todoItem__button--black" onClick={deleteItem}>
-          Clear
-        </button>
+        {!isShowInput ? (
+          <>
+            <button className="todoItem__button--green" onClick={() => setIsShowInput(true)}>
+              Edit
+            </button>
+            <button
+              className="todoItem__button--green"
+              style={chooseStyleStatus()}
+              onClick={changeStatus}
+            >
+              {status}
+            </button>
+            <button className="todoItem__button--black" onClick={deleteItem}>
+              Clear
+            </button>
+          </>
+        ) : (
+          <button className="todoItem__button--green" onClick={handleSaveItem}>
+            Save
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,63 +1,22 @@
-import { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import map from 'lodash/map';
 import './App.css';
 import Header from './layouts/Header';
 import Body from './layouts/Body';
 import Footer from './layouts/Footer';
-import { STATUS_CONTENT } from './config/constants.js';
+import Modal from './components/Modal';
 
-const todoArray = [
-  {
-    content: 'Dùng create-react-app tạo app',
-    status: STATUS_CONTENT.NEW,
-  },
-  {
-    content: 'Tạo Home Page, import vào App.js',
-    status: STATUS_CONTENT.DOING,
-  },
-  {
-    content: 'Tạo UI như design trong cái link figma',
-    status: STATUS_CONTENT.DONE,
-  },
-];
 function App() {
-  const [listTodo, setListTodo] = useState(todoArray);
-
-  const addNewTodo = (valueItem) => {
-    setListTodo([
-      ...listTodo,
-      {
-        content: valueItem.content,
-        status: valueItem.status,
-      },
-    ]);
-  };
-
-  const changeStatus = (indexItem) => {
-    const arrTodo = listTodo;
-
-    arrTodo.splice(indexItem, 1, {
-      content: listTodo[indexItem].content,
-      status:
-        listTodo[indexItem].status === STATUS_CONTENT.NEW
-          ? STATUS_CONTENT.DOING
-          : STATUS_CONTENT.DONE,
-    });
-
-    setListTodo([...arrTodo]);
-  };
-
-  const deleteItem = (indexItem) => {
-    const arrTodo = listTodo;
-    arrTodo.splice(indexItem, 1);
-    setListTodo([...arrTodo]);
-  };
-
+  map([1, 2, 3], (item) => console.log(item));
   return (
-    <div className="todo-app">
-      <Header addNewTodo={addNewTodo} />
-      <Body todoArray={listTodo} changeStatus={changeStatus} deleteItem={deleteItem} />
-      <Footer />
-    </div>
+    <>
+      <Modal />
+      <div className="todo-app">
+        <Header />
+        <Body />
+        <Footer />
+      </div>
+    </>
   );
 }
 
