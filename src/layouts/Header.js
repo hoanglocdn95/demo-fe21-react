@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { STATUS_CONTENT } from '../config/constants.js';
 import { useNavigate } from 'react-router-dom';
 // import todoStore from '../store/todoStore.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { addNewTodo } from '../slice/todoSlice';
+import { useDispatch } from 'react-redux';
+import { addNewTodo, fetchTodos } from '../slice/todoSlice';
+import { toggleModal } from '../slice/modalSlice';
 
 function Header() {
   const navigate = useNavigate();
@@ -13,8 +14,6 @@ function Header() {
   const [valueSelect, setValueSelect] = useState(STATUS_CONTENT.NEW);
 
   const handleAddNewTodo = (e) => {
-    // todoStore.addNewTodo({ content: valueInput, status: valueSelect });
-    console.log('handleAddNewTodo');
     dispatch(addNewTodo({ content: valueInput, status: valueSelect }));
     e.preventDefault();
   };
@@ -22,6 +21,11 @@ function Header() {
   return (
     <div className="header">
       <h2>TO DO APPLICATION</h2>
+      <button
+        onClick={() => dispatch(toggleModal({ content: <p>đây là đai tiếng nói việt nam</p> }))}
+      >
+        Mở Modal
+      </button>
       <form>
         <div>
           <input

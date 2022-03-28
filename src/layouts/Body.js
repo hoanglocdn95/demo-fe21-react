@@ -1,21 +1,25 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 
 import TodoItem from '../components/TodoItem';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import DoneScreen from '../screens/DoneScreen';
 import AllScreen from '../screens/AllScreen';
 import NewScreen from '../screens/NewScreen';
 import DoingScreen from '../screens/DoingScreen';
-import * as statusContent from '../config/constants.js';
+import { STATUS_CONTENT } from '../config/constants.js';
 // import todoStore from '../store/todoStore.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteItem } from '../slice/todoSlice';
+import { deleteItem, fetchTodos, changeStatus, saveContent } from '../slice/todoSlice';
 
 function Body() {
   const todo = useSelector((state) => state.todo);
   const dispatch = useDispatch();
-  console.log('Body ~ todo', todo);
+
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, []);
 
   const renderItem = (status = null) => {
     // return todoStore.TodoArray.filter((item) => {
@@ -29,9 +33,17 @@ function Body() {
           <TodoItem
             key={index}
             {...item}
-            // changeStatus={() => todoStore.changeStatus(index)}
-            deleteItem={() => dispatch(deleteItem({ indexItem: index }))}
-            // saveContent={(content) => todoStore.saveContent(index, content)}
+            changeStatus={() =>
+              dispatch(
+                changeStatus({
+                  id: item.id,
+                  status:
+                    item.status === STATUS_CONTENT.NEW ? STATUS_CONTENT.DOING : STATUS_CONTENT.DONE,
+                })
+              )
+            }
+            deleteItem={() => dispatch(deleteItem({ id: item.id }))}
+            saveContent={(content) => dispatch(saveContent({ id: item.id, content }))}
           />
         );
       });
@@ -41,18 +53,12 @@ function Body() {
     <div className="body">
       <Routes>
         <Route path="/" element={<AllScreen>{renderItem()}</AllScreen>} />
-        <Route
-          path="new"
-          element={<NewScreen>{renderItem(statusContent.STATUS_CONTENT.NEW)}</NewScreen>}
-        />
+        <Route path="new" element={<NewScreen>{renderItem(STATUS_CONTENT.NEW)}</NewScreen>} />
         <Route
           path="doing"
-          element={<DoingScreen>{renderItem(statusContent.STATUS_CONTENT.DOING)}</DoingScreen>}
+          element={<DoingScreen>{renderItem(STATUS_CONTENT.DOING)}</DoingScreen>}
         />
-        <Route
-          path="done"
-          element={<DoneScreen>{renderItem(statusContent.STATUS_CONTENT.DONE)}</DoneScreen>}
-        />
+        <Route path="done" element={<DoneScreen>{renderItem(STATUS_CONTENT.DONE)}</DoneScreen>} />
       </Routes>
     </div>
   );
